@@ -1,0 +1,1 @@
+-- Script SQL d'initialisation de la base de donnée

@@ -1,0 +1,39 @@
+version: '3'
+services:
+  hack_nom_de_lepreuve:
+    build: .
+    image: hack_nom_de_lepreuve
+    container_name: hack_nom_de_lepreuve
+    environment:
+      - APACHE_ENVVARS=/etc/apache2/envvars
+    restart: always
+    ports:
+      - '80:80'
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - hack_nom_de_lepreuve
+  db:
+    image: mariadb
+    container_name: hack_nom_de_lepreuve_db
+    environment:
+      MYSQL_DATABASE: nom_de_la_db
+      MYSQL_USER: user_de_la_db
+      MYSQL_PASSWORD: pass_de_la_db
+      MYSQL_ROOT_PASSWORD: root_pass_de_la_db
+    restart: always
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - hack_nom_de_lepreuve
+
+volumes:
+  db_data: {}
+
+networks:
+  hack_nom_de_lepreuve:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.bridge.name: "hack_nom_epreuve"
